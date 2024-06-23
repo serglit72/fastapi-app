@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi_login import LoginManager
+# from fastapi_login import LoginManager
 
 app = FastAPI()
 

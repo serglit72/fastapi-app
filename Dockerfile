@@ -1,19 +1,22 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
+# Install Nginx
+RUN apt-get update && apt-get install -y nginx
+
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy the application files
+COPY . /app
+
 # Set the working directory
 WORKDIR /app
-
-# Copy the requirements.txt first for better caching of Docker layers
-COPY requirements.txt /app/
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application files
-COPY . /app
+# Expose the port Nginx will run on
+EXPOSE 80
 
-# Expose port 8000
-EXPOSE 8000
-
-# Command to run the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the Nginx server and Gunicorn
+CMD ["sh", "-c", "nginx && gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app"]
