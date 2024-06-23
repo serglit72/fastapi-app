@@ -2,6 +2,7 @@ boto3
 botocore
 ansible
 fastapi
+uvicorn
 python-multipart
 pydantic[dotenv]
 fastapi-login
