@@ -2,12 +2,8 @@ boto3
 botocore
 ansible
 fastapi
-dotenv
-fastapi-cli
-jinja2
 uvicorn
 python-multipart
-pydantic
-pydantic-settings
+pydantic[dotenv]
 fastapi-login
 jose
