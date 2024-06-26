@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application files
 COPY . /app
-
+RUN python3 scripts/create_dotenv.py
 # Expose port 8000
 EXPOSE 8000
 

@@ -4,6 +4,11 @@ ansible
 fastapi
 uvicorn
 python-multipart
-pydantic[dotenv]
 fastapi-login
 jose
+pydantic-core==2.18.4 ; python_version >= "3.8" and python_version < "4.0"
+pydantic-settings==2.3.3 ; python_version >= "3.8" and python_version < "4.0"
+pydantic==2.7.4 ; python_version >= "3.8" and python_version < "4.0"
+pygments==2.18.0 ; python_version >= "3.8" and python_version < "4.0"
+pyjwt==2.8.0 ; python_version >= "3.8" and python_version < "4.0"
+python-dotenv==1.0.1 ; python_version >= "3.8" and python_version < "4.0"
