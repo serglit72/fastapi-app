@@ -88,9 +88,9 @@ async def create_upload_file(file: UploadFile = File(...), user=Depends(get_user
     processed_file_path = process_file(file_location)
     return {"file_url": f"/static/{processed_file_path}"}
 
-@app.get("/", response_class=HTMLResponse)
-async def read_root():
-    return templates.TemplateResponse("index.html", {"request": {}})
+# @app.get("/", response_class=HTMLResponse)
+# async def read_root():
+#     return templates.TemplateResponse("index.html", {"request": {}})
 
 @app.post("/auth/register")
 def register(user: UserCreate):
