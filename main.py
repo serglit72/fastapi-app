@@ -47,7 +47,7 @@ TOKEN_URL = "/auth/token"
 
 
 app = FastAPI()
-app.add_middleware(HTTPSRedirectMiddleware)
+# app.add_middleware(HTTPSRedirectMiddleware)
 manager = LoginManager(DEFAULT_SETTINGS.secret, TOKEN_URL)
 
 
@@ -66,10 +66,13 @@ manager = LoginManager(SECRET, token_url="/auth/login")
 def get_user(email: str):
     return DB["users"].get(email)
 
+@app.get("/test")
+def read_root():
+    return {"Hello": "World"}
 
 @app.get("/")
 def index():
-    with open("./templates/index.html", 'r') as f:
+    with open("templates/index.html", 'r') as f:
         return HTMLResponse(content=f.read())
 
 # @app.post("/auth/login")
@@ -92,40 +95,41 @@ async def create_upload_file(file: UploadFile = File(...), user=Depends(get_user
 # async def read_root():
 #     return templates.TemplateResponse("index.html", {"request": {}})
 
-@app.post("/auth/register")
-def register(user: UserCreate):
-    if user.email in DB["users"]:
-        raise HTTPException(status_code=400, detail="A user with this email already exists")
-    else:
-        db_user = User(**user.dict(), id=uuid.uuid4())
-        # PLEASE hash your passwords in real world applications
-        DB["users"][db_user.email] = db_user
-        return {"detail": "Successful registered"}
+# @app.post("/auth/register")
+# def register(user: UserCreate):
+#     if user.email in DB["users"]:
+#         raise HTTPException(status_code=400, detail="A user with this email already exists")
+#     else:
+#         db_user = User(**user.dict(), id=uuid.uuid4())
+#         # PLEASE hash your passwords in real world applications
+#         DB["users"][db_user.email] = db_user
+#         return {"detail": "Successful registered"}
 
 
-@app.post(TOKEN_URL)
-def login(data: OAuth2PasswordRequestForm = Depends()):
-    email = data.username
-    password = data.password
+# @app.post(TOKEN_URL)
+# def login(data: OAuth2PasswordRequestForm = Depends()):
+#     email = data.username
+#     password = data.password
 
-    user = get_user(email)  # we are using the same function to retrieve the user
-    if not user:
-        raise InvalidCredentialsException  # you can also use your own HTTPException
-    elif password != user.password:
-        raise InvalidCredentialsException
+#     user = get_user(email)  # we are using the same function to retrieve the user
+#     if not user:
+#         raise InvalidCredentialsException  # you can also use your own HTTPException
+#     elif password != user.password:
+#         raise InvalidCredentialsException
 
-    access_token = manager.create_access_token(
-        data=dict(sub=email)
-    )
-    return {'access_token': access_token, 'token_type': 'bearer'}
+#     access_token = manager.create_access_token(
+#         data=dict(sub=email)
+#     )
+#     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-@app.get("/private")
-def private_route(user=Depends(manager)):
-    return {"detail": f"Welcome {user.email}"}
+# @app.get("/private")
+# def private_route(user=Depends(manager)):
+#     return {"detail": f"Welcome {user.email}"}
 
 
 if __name__ == "__main__":
+    
     import uvicorn
 
-    uvicorn.run("app:app")
+    uvicorn.run("main:app")
